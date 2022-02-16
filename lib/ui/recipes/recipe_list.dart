@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:recipes/ui/recipe_card.dart';
+import 'package:recipes/ui/recipes/recipe_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../network/recipe_model.dart';
 import '../widgets/custom_dropdown.dart';
 import '../colors.dart';
 
@@ -28,6 +33,7 @@ class _RecipeListState extends State<RecipeList> {
   bool hasMore = false;
   bool loading = false;
   bool inErrorState = false;
+  APIRecipeQuery? _currentRecipes1;
 
   // This clears the way for you to save the user’s previous searches and
   // keep track of the current search
@@ -36,6 +42,7 @@ class _RecipeListState extends State<RecipeList> {
   @override
   void initState() {
     super.initState();
+    loadRecipes();
     getPreviousSearches();
     searchTextController = TextEditingController();
     _scrollController.addListener(() {
@@ -55,6 +62,13 @@ class _RecipeListState extends State<RecipeList> {
           });
         }
       }
+    });
+  }
+
+  Future loadRecipes() async {
+    final jsonString = await rootBundle.loadString('assets/recipes1.json');
+    setState(() {
+      _currentRecipes1 = APIRecipeQuery.fromJson(jsonDecode(jsonString));
     });
   }
 
@@ -188,12 +202,28 @@ class _RecipeListState extends State<RecipeList> {
   }
 
   Widget _buildRecipeLoader(BuildContext context) {
-    if (searchTextController.text.length < 3) {
+    if (_currentRecipes1 == null || _currentRecipes1?.hits == null) {
       return Container();
     }
-    // Show a loading indicator while waiting for the movies
-    return const Center(
-      child: CircularProgressIndicator(),
+    // Show a loading indicator while waiting for the recipes
+    return Center(
+      child: _buildRecipeCard(context, _currentRecipes1!.hits, 0),
+    );
+  }
+
+  Widget _buildRecipeCard(
+      BuildContext topLevelContext, List<APIHits> hits, int index) {
+    final recipe = hits[index].recipe;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          topLevelContext,
+          MaterialPageRoute(
+            builder: (context) => const RecipeDetails(),
+          ),
+        );
+      },
+      child: recipesStringCard(recipe.image, recipe.label),
     );
   }
 }
