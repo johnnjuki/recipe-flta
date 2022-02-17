@@ -3,14 +3,22 @@ import 'dart:math';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import '../widgets/custom_dropdown.dart';
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
 import '../../network/model_response.dart';
 import '../../network/recipe_model.dart';
+<<<<<<< HEAD
 import '../../network/service_interface.dart';
 import '../../data/models/models.dart';
 import '../widgets/custom_dropdown.dart';
+=======
+import '../../network/recipe_service.dart';
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
 import '../recipe_card.dart';
 import '../recipes/recipe_details.dart';
 import '../colors.dart';
@@ -35,7 +43,10 @@ class _RecipeListState extends State<RecipeList> {
   bool hasMore = false;
   bool loading = false;
   bool inErrorState = false;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
   // This clears the way for you to save the user’s previous searches and
   // keep track of the current search
   List<String> previousSearches = <String>[];
@@ -66,6 +77,16 @@ class _RecipeListState extends State<RecipeList> {
     });
   }
 
+<<<<<<< HEAD
+=======
+  // Retrieve recipe data
+  Future<APIRecipeQuery> getRecipeData(String query, int from, int to) async {
+    final recipeJson = await RecipeService().getRecipes(query, from, to);
+    final recipeMap = json.decode(recipeJson);
+    return APIRecipeQuery.fromJson(recipeMap);
+  }
+
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
   @override
   void dispose() {
     searchTextController.dispose();
@@ -199,11 +220,17 @@ class _RecipeListState extends State<RecipeList> {
     if (searchTextController.text.length < 3) {
       return Container();
     }
+<<<<<<< HEAD
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
       future: Provider.of<ServiceInterface>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),
+=======
+    return FutureBuilder<APIRecipeQuery>(
+      future: getRecipeData(searchTextController.text.trim(),
+          currentStartPosition, currentEndPosition),
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -215,6 +242,7 @@ class _RecipeListState extends State<RecipeList> {
               ),
             );
           }
+<<<<<<< HEAD
 
           // loading = false;
           // final result = snapshot.data?.body;
@@ -246,6 +274,10 @@ class _RecipeListState extends State<RecipeList> {
             return _buildRecipeList(context, currentSearchList);
           }
           final query = (result as Success).value;
+=======
+          loading = false;
+          final query = snapshot.data;
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
           inErrorState = false;
           if (query != null) {
             currentCount = query.count;
@@ -293,6 +325,7 @@ class _RecipeListState extends State<RecipeList> {
       onTap: () {
         Navigator.push(
           topLevelContext,
+<<<<<<< HEAD
           MaterialPageRoute(builder: (context) {
             final detailRecipe = Recipe(
               label: recipe.label,
@@ -305,6 +338,11 @@ class _RecipeListState extends State<RecipeList> {
             detailRecipe.ingredients = convertIngredients(recipe.ingredients);
             return RecipeDetails(recipe: detailRecipe);
           }),
+=======
+          MaterialPageRoute(
+            builder: (context) => RecipeDetails(recipe: recipe),
+          ),
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
         );
       },
       child: recipeCard(recipe),

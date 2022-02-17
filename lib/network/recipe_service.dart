@@ -9,7 +9,11 @@ part 'recipe_service.chopper.dart';
 
 const String apiKey = 'f0f7fef63f6660099cef5351921e5397';
 const String apiId = '2d893c77';
+<<<<<<< HEAD
 const String apiUrl = 'https://api.edamam.com';
+=======
+const String apiUrl = 'https://api.edamam.com/search';
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
 
 // This class defines the API calls and sets up chopper client to do the work.
 @ChopperApi()
@@ -23,6 +27,7 @@ abstract class RecipeService extends ChopperService
     @Query('to') int to,
   );
 
+<<<<<<< HEAD
   static RecipeService create() {
     final client = ChopperClient(
       baseUrl: apiUrl,
@@ -36,6 +41,13 @@ abstract class RecipeService extends ChopperService
       ],
     );
     return _$RecipeService(client);
+=======
+  Future<dynamic> getRecipes(String query, int from, int to) async {
+    final recipeData = await getData(
+      '$apiUrl?app_id=$apiId&app_key=$apiKey&q=$query&from=$from&to=$to',
+    );
+    return recipeData;
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
   }
 }
 
