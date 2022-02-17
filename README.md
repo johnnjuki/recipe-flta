@@ -1,16 +1,16 @@
 # recipe
 
-A new Flutter project.
+A Flutter application that loads recipes from <a href="https://developer.edamam.com/" target="_blank">Edamam Recipe API</a>.
 
-## Getting Started
+## User Interface
+<p>
+Chicken search:
+<img alt="Chicken Search Screenshot" src="screenshots/chicken_search.png" width="30%">
+<img alt="Chicken recipe details screenshot" src="screenshots/recipe_chicken_recipe_details.png" width="30%">
+</p>
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p>
+Steak Search:
+<img alt="Steak Search Screenshot" src="screenshots/steak_search.png" width="30%">
+<img alt="Steak recipe details screenshot" src="screenshots/recipe_steak_recipe_details.png" width="30%">
+</p>

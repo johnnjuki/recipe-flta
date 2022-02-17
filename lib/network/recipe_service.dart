@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 
 const String apiKey = 'f0f7fef63f6660099cef5351921e5397';
 const String apiId = '2d893c77';
-const String apiUrl = 'https://api.edamam.com/api/recipes/v2';
+const String apiUrl = 'https://api.edamam.com/search';
 
 class RecipeService {
   Future getData(String url) async {
@@ -24,7 +24,8 @@ class RecipeService {
 
   Future<dynamic> getRecipes(String query, int from, int to) async {
     final recipeData = await getData(
-        '$apiUrl?app_id=$apiId&app_key=$apiKey&q=$query&from=$from&to=$to');
+      '$apiUrl?app_id=$apiId&app_key=$apiKey&q=$query&from=$from&to=$to',
+    );
     return recipeData;
   }
 }
