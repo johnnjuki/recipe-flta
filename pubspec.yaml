@@ -39,7 +39,8 @@ dependencies:
   flutter_svg: ^0.22.0
   shared_preferences: ^2.0.7
   json_annotation: ^4.1.0
-  http: ^0.13.3
+  chopper: ^4.0.1
+  logging: ^1.0.1
 
 
 dev_dependencies:
@@ -47,6 +48,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.1
   json_serializable: ^4.1.4
+  chopper_generator: ^4.0.1
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
