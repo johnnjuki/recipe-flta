@@ -9,6 +9,13 @@
 .history
 .svn/
 
+# Recipe project related
+/screenshots/chicken_search.png
+/screenshots/first internet data fetch.png
+/screenshots/recipe_chicken_details.png
+/screenshots/recipe_steak_details.png
+/screenshots/second net search.png
+
 # IntelliJ related
 *.iml
 *.ipr
