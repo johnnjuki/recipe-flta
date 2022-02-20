@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../network/recipe_model.dart';
+import '../../data/models/models.dart';
+import '../../data/memory_repository.dart';
 import '../colors.dart';
 
 class RecipeDetails extends StatelessWidget {
@@ -10,10 +13,11 @@ class RecipeDetails extends StatelessWidget {
     Key? key,
     required this.recipe,
   }) : super(key: key);
-  final APIRecipe recipe;
+  final Recipe recipe;
 
   @override
   Widget build(BuildContext context) {
+    final repository = Provider.of<MemoryRepository>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -28,8 +32,7 @@ class RecipeDetails extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: CachedNetworkImage(
-                        // TODO 1
-                        imageUrl: recipe.image,
+                        imageUrl: recipe.image ?? '',
                         alignment: Alignment.topLeft,
                         fit: BoxFit.fill,
                         width: size.width,
@@ -51,8 +54,7 @@ class RecipeDetails extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    // TODO 2
-                    recipe.label,
+                    recipe.label ?? '',
                     style: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   ),
@@ -61,7 +63,6 @@ class RecipeDetails extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Chip(
-                    // TODO 3
                     label: Text(getCalories(recipe.calories)),
                   ),
                 ),
@@ -74,6 +75,7 @@ class RecipeDetails extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16.0)),
                     ),
                     onPressed: () {
+                      repository.insertRecipe(recipe);
                       Navigator.pop(context);
                     },
                     icon: SvgPicture.asset(
