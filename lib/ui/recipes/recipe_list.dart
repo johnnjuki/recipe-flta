@@ -3,13 +3,15 @@ import 'dart:math';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import '../widgets/custom_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 import '../../network/model_response.dart';
 import '../../network/recipe_model.dart';
 import '../../network/recipe_service.dart';
+import '../../mock_service/mock_service.dart';
 import '../../data/models/models.dart';
+import '../widgets/custom_dropdown.dart';
 import '../recipe_card.dart';
 import '../recipes/recipe_details.dart';
 import '../colors.dart';
@@ -199,7 +201,7 @@ class _RecipeListState extends State<RecipeList> {
       return Container();
     }
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
-      future: RecipeService.create().queryRecipes(
+      future: Provider.of<MockService>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),
