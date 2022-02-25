@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../network/model_response.dart';
 import '../../network/recipe_model.dart';
-import '../../network/recipe_service.dart';
-import '../../mock_service/mock_service.dart';
+import '../../network/service_interface.dart';
 import '../../data/models/models.dart';
 import '../widgets/custom_dropdown.dart';
 import '../recipe_card.dart';
@@ -201,7 +200,7 @@ class _RecipeListState extends State<RecipeList> {
       return Container();
     }
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
-      future: Provider.of<MockService>(context).queryRecipes(
+      future: Provider.of<ServiceInterface>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),
