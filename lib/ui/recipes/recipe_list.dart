@@ -3,25 +3,17 @@ import 'dart:math';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
-import '../widgets/custom_dropdown.dart';
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:recipes/ui/widgets/custom_dropdown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/models/models.dart';
 import '../../network/model_response.dart';
 import '../../network/recipe_model.dart';
-<<<<<<< HEAD
 import '../../network/service_interface.dart';
-import '../../data/models/models.dart';
-import '../widgets/custom_dropdown.dart';
-=======
-import '../../network/recipe_service.dart';
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
+import '../colors.dart';
 import '../recipe_card.dart';
 import '../recipes/recipe_details.dart';
-import '../colors.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -31,8 +23,8 @@ class RecipeList extends StatefulWidget {
 }
 
 class _RecipeListState extends State<RecipeList> {
-  // Define a constant for the preference key
   static const String prefSearchKey = 'previousSearches';
+
   late TextEditingController searchTextController;
   final ScrollController _scrollController = ScrollController();
   List<APIHits> currentSearchList = [];
@@ -43,12 +35,6 @@ class _RecipeListState extends State<RecipeList> {
   bool hasMore = false;
   bool loading = false;
   bool inErrorState = false;
-<<<<<<< HEAD
-
-=======
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
-  // This clears the way for you to save the user’s previous searches and
-  // keep track of the current search
   List<String> previousSearches = <String>[];
 
   @override
@@ -56,44 +42,34 @@ class _RecipeListState extends State<RecipeList> {
     super.initState();
     getPreviousSearches();
 
-    searchTextController = TextEditingController();
-    _scrollController.addListener(() {
-      final triggerFetchMoreSize =
-          0.7 * _scrollController.position.maxScrollExtent;
+    searchTextController = TextEditingController(text: '');
+    _scrollController
+      .addListener(() {
+        final triggerFetchMoreSize =
+            0.7 * _scrollController.position.maxScrollExtent;
 
-      if (_scrollController.position.pixels > triggerFetchMoreSize) {
-        if (hasMore &&
-            currentEndPosition < currentCount &&
-            !loading &&
-            !inErrorState) {
-          setState(() {
-            loading = true;
-            currentStartPosition = currentEndPosition;
-            currentEndPosition =
-                min(currentStartPosition + pageCount, currentCount);
-          });
+        if (_scrollController.position.pixels > triggerFetchMoreSize) {
+          if (hasMore &&
+              currentEndPosition < currentCount &&
+              !loading &&
+              !inErrorState) {
+            setState(() {
+              loading = true;
+              currentStartPosition = currentEndPosition;
+              currentEndPosition =
+                  min(currentStartPosition + pageCount, currentCount);
+            });
+          }
         }
-      }
-    });
+      });
   }
 
-<<<<<<< HEAD
-=======
-  // Retrieve recipe data
-  Future<APIRecipeQuery> getRecipeData(String query, int from, int to) async {
-    final recipeJson = await RecipeService().getRecipes(query, from, to);
-    final recipeMap = json.decode(recipeJson);
-    return APIRecipeQuery.fromJson(recipeMap);
-  }
-
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
   @override
   void dispose() {
     searchTextController.dispose();
     super.dispose();
   }
 
-  // Save the list of previous searches
   void savePreviousSearches() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList(prefSearchKey, previousSearches);
@@ -115,12 +91,14 @@ class _RecipeListState extends State<RecipeList> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: <Widget>[
-          _buildSearchCard(),
-          _buildRecipeLoader(context),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            _buildSearchCard(),
+            _buildRecipeLoader(context),
+          ],
+        ),
       ),
     );
   }
@@ -129,8 +107,7 @@ class _RecipeListState extends State<RecipeList> {
     return Card(
       elevation: 4,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(8.0))),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(
@@ -145,27 +122,26 @@ class _RecipeListState extends State<RecipeList> {
                 }
               },
             ),
-            const SizedBox(width: 6.0),
+            const SizedBox(
+              width: 6.0,
+            ),
             Expanded(
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search',
-                      ),
-                      autofocus: false,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) {
-                        if (!previousSearches.contains(value)) {
-                          previousSearches.add(value);
-                          savePreviousSearches();
-                        }
-                      },
-                      controller: searchTextController,
-                    ),
-                  ),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                            border: InputBorder.none, hintText: 'Search'),
+                        autofocus: false,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (value) {
+                          if (!previousSearches.contains(value)) {
+                            previousSearches.add(value);
+                            savePreviousSearches();
+                          }
+                        },
+                        controller: searchTextController,
+                      )),
                   PopupMenuButton<String>(
                     icon: const Icon(
                       Icons.arrow_drop_down,
@@ -178,9 +154,9 @@ class _RecipeListState extends State<RecipeList> {
                     itemBuilder: (BuildContext context) {
                       return previousSearches
                           .map<CustomDropdownMenuItem<String>>((String value) {
-                        return CustomDropdownMenuItem(
-                          value: value,
+                        return CustomDropdownMenuItem<String>(
                           text: value,
+                          value: value,
                           callback: () {
                             setState(() {
                               previousSearches.remove(value);
@@ -208,7 +184,6 @@ class _RecipeListState extends State<RecipeList> {
       currentStartPosition = 0;
       hasMore = true;
       value = value.trim();
-
       if (!previousSearches.contains(value)) {
         previousSearches.add(value);
         savePreviousSearches();
@@ -220,17 +195,11 @@ class _RecipeListState extends State<RecipeList> {
     if (searchTextController.text.length < 3) {
       return Container();
     }
-<<<<<<< HEAD
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
       future: Provider.of<ServiceInterface>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),
-=======
-    return FutureBuilder<APIRecipeQuery>(
-      future: getRecipeData(searchTextController.text.trim(),
-          currentStartPosition, currentEndPosition),
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -242,15 +211,7 @@ class _RecipeListState extends State<RecipeList> {
               ),
             );
           }
-<<<<<<< HEAD
 
-          // loading = false;
-          // final result = snapshot.data?.body;
-          // if (result is Error) {
-          //   // Hit an error
-          //   inErrorState = true;
-          //   return _buildRecipeList(context, currentSearchList);
-          // }
           loading = false;
           // Hit an error
           if (false == snapshot.data?.isSuccessful) {
@@ -274,10 +235,6 @@ class _RecipeListState extends State<RecipeList> {
             return _buildRecipeList(context, currentSearchList);
           }
           final query = (result as Success).value;
-=======
-          loading = false;
-          final query = snapshot.data;
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
           inErrorState = false;
           if (query != null) {
             currentCount = query.count;
@@ -290,8 +247,10 @@ class _RecipeListState extends State<RecipeList> {
           return _buildRecipeList(context, currentSearchList);
         } else {
           if (currentCount == 0) {
-            // Show a loading indicator while waiting for the recipes
-            return const Center(child: CircularProgressIndicator());
+            // Show a loading indicator while waiting for the movies
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
             return _buildRecipeList(context, currentSearchList);
           }
@@ -306,6 +265,7 @@ class _RecipeListState extends State<RecipeList> {
     final itemWidth = size.width / 2;
     return Flexible(
       child: GridView.builder(
+        controller: _scrollController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: (itemWidth / itemHeight),
@@ -323,27 +283,19 @@ class _RecipeListState extends State<RecipeList> {
     final recipe = hits[index].recipe;
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          topLevelContext,
-<<<<<<< HEAD
-          MaterialPageRoute(builder: (context) {
+        Navigator.push(topLevelContext, MaterialPageRoute(
+          builder: (context) {
             final detailRecipe = Recipe(
-              label: recipe.label,
-              image: recipe.image,
-              url: recipe.url,
-              calories: recipe.calories,
-              totalTime: recipe.totalTime,
-              totalWeight: recipe.totalWeight,
-            );
+                label: recipe.label,
+                image: recipe.image,
+                url: recipe.url,
+                calories: recipe.calories,
+                totalTime: recipe.totalTime,
+                totalWeight: recipe.totalWeight);
             detailRecipe.ingredients = convertIngredients(recipe.ingredients);
             return RecipeDetails(recipe: detailRecipe);
-          }),
-=======
-          MaterialPageRoute(
-            builder: (context) => RecipeDetails(recipe: recipe),
-          ),
->>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
-        );
+          },
+        ));
       },
       child: recipeCard(recipe),
     );
