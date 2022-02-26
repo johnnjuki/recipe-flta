@@ -4,8 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../network/recipe_model.dart';
+<<<<<<< HEAD
 import '../../data/models/models.dart';
-import '../../data/memory_repository.dart';
+import '../../data/repository.dart';
+=======
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
 import '../colors.dart';
 
 class RecipeDetails extends StatelessWidget {
@@ -13,11 +16,15 @@ class RecipeDetails extends StatelessWidget {
     Key? key,
     required this.recipe,
   }) : super(key: key);
+<<<<<<< HEAD
   final Recipe recipe;
+=======
+  final APIRecipe recipe;
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
 
   @override
   Widget build(BuildContext context) {
-    final repository = Provider.of<MemoryRepository>(context);
+    final repository = Provider.of<Repository>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -32,7 +39,12 @@ class RecipeDetails extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: CachedNetworkImage(
+<<<<<<< HEAD
                         imageUrl: recipe.image ?? '',
+=======
+                        // TODO 1
+                        imageUrl: recipe.image,
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
                         alignment: Alignment.topLeft,
                         fit: BoxFit.fill,
                         width: size.width,
@@ -54,7 +66,12 @@ class RecipeDetails extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
+<<<<<<< HEAD
                     recipe.label ?? '',
+=======
+                    // TODO 2
+                    recipe.label,
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
                     style: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   ),
@@ -63,6 +80,10 @@ class RecipeDetails extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Chip(
+<<<<<<< HEAD
+=======
+                    // TODO 3
+>>>>>>> 4df485a (Fetch and display recipes from Edamam Recipe API)
                     label: Text(getCalories(recipe.calories)),
                   ),
                 ),
