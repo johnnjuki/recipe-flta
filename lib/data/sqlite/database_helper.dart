@@ -57,7 +57,6 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     final documentDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentDirectory.path, _databaseName);
-
     // TODO: Remember to turn off debugging before deploying app to stores.
     Sqflite.setDebugModeOn(true);
     // Create and store the database file in path
@@ -85,5 +84,21 @@ class DatabaseHelper {
     return _streamDatabase;
   }
 
-  // TODO: Add parseRecipes here
+  List<Recipe> parseRecipes(List<Map<String, dynamic>> recipeList) {
+    final recipes = <Recipe>[];
+    for (var recipeMap in recipeList) {
+      final recipe = Recipe.fromJson(recipeMap);
+      recipes.add(recipe);
+    }
+    return recipes;
+  }
+
+  List<Ingredient> parseIngredients(List<Map<String, dynamic>> ingredientList) {
+    final ingredients = <Ingredient>[];
+    for (var ingredientMap in ingredientList) {
+      final ingredient = Ingredient.fromJson(ingredientMap);
+      ingredients.add(ingredient);
+    }
+    return ingredients;
+  }
 }
