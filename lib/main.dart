@@ -5,6 +5,7 @@ import 'package:recipes/mock_service/mock_service.dart';
 
 import 'data/repository.dart';
 import 'data/memory_repository.dart';
+import 'data/sqlite/sqlite_repository.dart';
 import 'network/recipe_service.dart';
 import 'network/service_interface.dart';
 import 'ui/main_screen.dart';
@@ -12,7 +13,9 @@ import 'ui/main_screen.dart';
 Future<void> main() async {
   _setUpLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  final repository = SqliteRepository();
+  await repository.init();
+  runApp(MyApp(repository: repository));
 }
 
 void _setUpLogging() {
@@ -23,7 +26,8 @@ void _setUpLogging() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.repository}) : super(key: key);
+  final Repository repository;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,8 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<Repository>(
           lazy: false,
-          create: (context) => MemoryRepository(),
+          create: (context) => repository,
+          dispose: (context, Repository repository) => repository.close(),
         ),
         Provider<ServiceInterface>(
           lazy: false,
