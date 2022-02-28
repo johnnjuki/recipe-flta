@@ -1,5 +1,4 @@
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlbrite/sqlbrite.dart';
 import 'package:synchronized/synchronized.dart';
@@ -100,5 +99,105 @@ class DatabaseHelper {
       ingredients.add(ingredient);
     }
     return ingredients;
+  }
+
+  // Implement repository-like functions
+
+  Future<List<Recipe>> findAllRecipes() async {
+    final db = await instance.streamDatabase;
+    final recipeList = await db.query(recipeTable);
+    final recipes = parseRecipes(recipeList);
+    return recipes;
+  }
+
+  // Convert each row in recipeTable (delivered via a stream) to list of Recipes
+  // yield* creates a stream using the query
+  Stream<List<Recipe>> watchAllRecipes() async* {
+    final db = await instance.streamDatabase;
+    yield* db.createQuery(recipeTable).mapToList((row) => Recipe.fromJson(row));
+  }
+
+  Stream<List<Ingredient>> watchAllIngredients() async* {
+    final db = await instance.streamDatabase;
+    yield* db
+        .createQuery(ingredientTable)
+        .mapToList((row) => Ingredient.fromJson(row));
+  }
+
+  // Let the user find the recipes they need
+  Future<Recipe> findRecipeById(int id) async {
+    final db = await instance.streamDatabase;
+    final recipeList = await db.query(recipeTable, where: 'id = $id');
+    final recipes = parseRecipes(recipeList);
+    return recipes.first;
+  }
+
+  Future<List<Ingredient>> findAllIngredients() async {
+    final db = await instance.streamDatabase;
+    final ingredientList = await db.query(ingredientTable);
+    final ingredients = parseIngredients(ingredientList);
+    return ingredients;
+  }
+
+  Future<List<Ingredient>> findRecipeIngredient(int recipeId) async {
+    final db = await instance.streamDatabase;
+    final ingredientList =
+        await db.query(ingredientTable, where: 'recipeId = $recipeId');
+    final ingredients = parseIngredients(ingredientList);
+    return ingredients;
+  }
+
+  // Insert data into tables
+  Future<int> insert(String table, Map<String, dynamic> row) async {
+    final db = await instance.streamDatabase;
+    return db.insert(table, row);
+  }
+
+  Future<int> insertRecipe(Recipe recipe) {
+    return insert(recipeTable, recipe.toJson());
+  }
+
+  Future<int> insertIngredient(Ingredient ingredient) {
+    return insert(ingredientTable, ingredient.toJson());
+  }
+
+  // Delete data from tables
+  Future<int> _delete(String table, String columnId, int id) async {
+    final db = await instance.streamDatabase;
+    return db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteRecipe(Recipe recipe) async {
+    if (recipe.id != null) {
+      return _delete(recipeTable, recipeId, recipe.id!);
+    } else {
+      return Future.value(-1);
+    }
+  }
+
+  Future<int> deleteIngredient(Ingredient ingredient) async {
+    if (ingredient.id != null) {
+      return _delete(ingredientTable, ingredientId, ingredient.id!);
+    } else {
+      return Future.value(-1);
+    }
+  }
+
+  Future<void> deleteIngredients(List<Ingredient> ingredients) {
+    for (var ingredient in ingredients) {
+      if (ingredient.id != null) {
+        _delete(ingredientTable, ingredientId, ingredient.id!);
+      }
+    }
+    return Future.value();
+  }
+
+  Future<int> deleteRecipeIngredients(int id) async {
+    final db = await instance.streamDatabase;
+    return db.delete(ingredientTable, where: '$recipeId = ?', whereArgs: [id]);
+  }
+
+  void close() {
+    _streamDatabase.close();
   }
 }
