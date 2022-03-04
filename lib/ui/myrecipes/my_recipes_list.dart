@@ -66,8 +66,8 @@ class _MyRecipesListState extends State<MyRecipesList> {
                     children: [
                       SlidableAction(
                         label: 'Delete',
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.red,
                         icon: Icons.delete,
                         onPressed: (context) =>
                             deleteRecipe(repository, recipe),
@@ -81,7 +81,7 @@ class _MyRecipesListState extends State<MyRecipesList> {
                       SlidableAction(
                         label: 'Delete',
                         backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.black,
+                        foregroundColor: Colors.red,
                         icon: Icons.delete,
                         onPressed: (context) =>
                             deleteRecipe(repository, recipe),

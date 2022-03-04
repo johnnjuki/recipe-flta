@@ -97,7 +97,7 @@ class IngredientDao extends DatabaseAccessor<RecipeDatabase>
   Future<List<DriftIngredientData>> findRecipeIngredients(int id) =>
       (select(driftIngredient)..where((tbl) => tbl.recipeId.equals(id))).get();
 
-  Future<int> insertIngredients(Insertable<DriftIngredientData> ingredient) =>
+  Future<int> insertIngredient(Insertable<DriftIngredientData> ingredient) =>
       into(driftIngredient).insert(ingredient);
 
   Future deleteIngredient(int id) => Future.value(
