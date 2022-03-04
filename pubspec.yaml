@@ -35,8 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   cached_network_image: ^3.1.0
-  flutter_slidable: ^0.6.0
-  flutter_svg: ^0.22.0
+  flutter_slidable: ^1.2.0
+  flutter_svg: ^1.0.3
   shared_preferences: ^2.0.7
   json_annotation: ^4.1.0
   chopper: ^4.0.1
@@ -47,14 +47,17 @@ dependencies:
   path_provider: ^2.0.2
   synchronized: ^3.0.0
   sqlbrite: ^2.1.0
+  drift: ^1.4.0
+  sqlite3_flutter_libs: ^0.5.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.1.1
-  json_serializable: ^4.1.4
+  json_serializable: ^6.1.4
   chopper_generator: ^4.0.1
+  drift_dev: ^1.4.0
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
