@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:recipes/mock_service/mock_service.dart';
 
 import 'data/repository.dart';
+import 'data/sqlite/sqlite_repository.dart';
 import 'data/drift/drift_repository.dart';
 import 'network/recipe_service.dart';
 import 'network/service_interface.dart';
@@ -12,7 +13,7 @@ import 'ui/main_screen.dart';
 Future<void> main() async {
   _setUpLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  final repository = DriftRepository();
+  final repository = SqliteRepository();
   await repository.init();
   runApp(MyApp(repository: repository));
 }
