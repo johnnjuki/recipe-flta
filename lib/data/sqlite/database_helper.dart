@@ -56,8 +56,7 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     final documentDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentDirectory.path, _databaseName);
-    // TODO: Remember to turn off debugging before deploying app to stores.
-    Sqflite.setDebugModeOn(true);
+    Sqflite.setDebugModeOn(false);
     // Create and store the database file in path
     return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
